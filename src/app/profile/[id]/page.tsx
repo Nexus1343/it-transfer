@@ -47,18 +47,15 @@ export default function ProfilePage() {
   
   const profileId = params.id as string;
   
-  // Try to find as developer first, then as company
+  // Only show developer profiles since companies browse developers for hiring
   const developer = getDeveloperById(profileId);
-  const company = getCompanyById(profileId);
-  const profile = developer || company;
-  const profileType = developer ? 'developer' : company ? 'company' : null;
-
-  if (!profile || !profileType) {
+  
+  if (!developer) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-red-600">Profile Not Found</h1>
-          <p className="text-muted-foreground mb-4">The profile you're looking for doesn't exist.</p>
+          <h1 className="text-2xl font-bold text-red-600">Developer Not Found</h1>
+          <p className="text-muted-foreground mb-4">The developer profile you're looking for doesn't exist.</p>
           <Button asChild>
             <Link href="/developers">
               <ChevronLeft className="mr-2 h-4 w-4" />
@@ -70,11 +67,7 @@ export default function ProfilePage() {
     );
   }
 
-  const transferRequests = profileType === 'developer' 
-    ? getTransferRequestsByDeveloper(profileId)
-    : getTransferRequestsByCompany(profileId);
-
-  const employees = profileType === 'company' ? getDevelopersByCompany(profileId) : [];
+  const transferRequests = getTransferRequestsByDeveloper(profileId);
 
   const getSkillColor = (level: Skill['level']) => {
     switch (level) {
@@ -113,8 +106,7 @@ export default function ProfilePage() {
     navigator.clipboard.writeText(window.location.href);
   };
 
-  if (profileType === 'developer') {
-    const dev = profile as Developer;
+  const dev = developer;
     
     return (
       <div className="container mx-auto px-4 py-8">
@@ -209,18 +201,14 @@ export default function ProfilePage() {
                   <Share className="mr-2 h-4 w-4" />
                   Share
                 </Button>
-                {currentUser.role === 'company' && (
-                  <>
-                    <Button onClick={handleStartTransfer} size="lg">
-                      <HandCoins className="mr-2 h-4 w-4" />
-                      Make an Offer
-                    </Button>
-                    <Button variant="outline" onClick={handleMakeOffer}>
-                      <MessageCircle className="mr-2 h-4 w-4" />
-                      Negotiate
-                    </Button>
-                  </>
-                )}
+                <Button onClick={handleStartTransfer} size="lg">
+                  <HandCoins className="mr-2 h-4 w-4" />
+                  Make an Offer
+                </Button>
+                <Button variant="outline" onClick={handleMakeOffer}>
+                  <MessageCircle className="mr-2 h-4 w-4" />
+                  Negotiate
+                </Button>
               </div>
             </div>
           </div>
@@ -270,13 +258,11 @@ export default function ProfilePage() {
 
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className={`grid w-full ${currentUser.role === 'company' ? 'grid-cols-4' : 'grid-cols-3'}`}>
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="overview">Skills & Experience</TabsTrigger>
             <TabsTrigger value="achievements">Achievements</TabsTrigger>
             <TabsTrigger value="activity">Activity</TabsTrigger>
-            {currentUser.role === 'company' && (
-              <TabsTrigger value="insights">Company Insights</TabsTrigger>
-            )}
+            <TabsTrigger value="insights">Company Insights</TabsTrigger>
           </TabsList>
           
           <TabsContent value="overview" className="mt-6">
@@ -440,8 +426,7 @@ export default function ProfilePage() {
           </TabsContent>
 
           {/* Company Insights Tab */}
-          {currentUser.role === 'company' && (
-            <TabsContent value="insights" className="mt-6">
+          <TabsContent value="insights" className="mt-6">
               <div className="grid gap-6">
                 {/* Success Metrics */}
                 <Card>
@@ -604,197 +589,7 @@ export default function ProfilePage() {
                 </Card>
               </div>
             </TabsContent>
-          )}
         </Tabs>
       </div>
     );
-  }
-
-  // Company profile
-  const comp = profile as Company;
-  
-  return (
-    <div className="container mx-auto px-4 py-8">
-      {/* Back Button */}
-      <Button variant="ghost" className="mb-6" asChild>
-        <Link href="/developers">
-          <ChevronLeft className="mr-2 h-4 w-4" />
-          Back
-        </Link>
-      </Button>
-
-      {/* Header */}
-      <div className="mb-8">
-        <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6 mb-6">
-          <Avatar className="h-32 w-32">
-            <AvatarImage src={comp.logo} alt={comp.name} />
-            <AvatarFallback className="text-4xl">
-              {comp.name.substring(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          
-          <div className="flex-1">
-            <div className="flex items-center gap-3 mb-2">
-              <h1 className="text-4xl font-bold">{comp.name}</h1>
-              <Badge variant="outline">{comp.size}</Badge>
-            </div>
-            
-            <p className="text-2xl text-muted-foreground mb-4">{comp.industry}</p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-muted-foreground mb-4">
-              <div className="flex items-center gap-1">
-                <MapPin className="h-4 w-4" />
-                {comp.location}
-              </div>
-              <div className="flex items-center gap-1">
-                <Users className="h-4 w-4" />
-                {employees.length} employees
-              </div>
-              <div className="flex items-center gap-1">
-                <Star className="h-4 w-4 fill-current text-yellow-500" />
-                {comp.stats.averageRating.toFixed(1)} rating
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <a href={comp.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline cursor-pointer">
-                <Globe className="h-4 w-4 inline mr-1" />
-                {comp.website}
-              </a>
-              <a href={`mailto:${comp.email}`} className="text-muted-foreground hover:text-foreground cursor-pointer">
-                <Mail className="h-4 w-4 inline mr-1" />
-                {comp.email}
-              </a>
-            </div>
-          </div>
-          
-          <div className="flex flex-col gap-3 lg:items-end">
-            <div className="text-right">
-              <div className="text-3xl font-bold text-primary">
-                {comp.stats.totalTransfers}
-              </div>
-              <p className="text-sm text-muted-foreground">Total Transfers</p>
-            </div>
-            
-            <div className="flex gap-2">
-              <Button 
-                variant="outline" 
-                onClick={handleFollow}
-                className={isFollowing ? 'bg-blue-50 border-blue-200 text-blue-600' : ''}
-              >
-                <Heart className={`mr-2 h-4 w-4 ${isFollowing ? 'fill-current' : ''}`} />
-                {isFollowing ? 'Following' : 'Follow'}
-              </Button>
-              <Button variant="outline" onClick={handleShare}>
-                <Share className="mr-2 h-4 w-4" />
-                Share
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Company Description */}
-      <Card className="mb-8">
-        <CardContent className="p-6">
-          <p className="text-lg leading-relaxed">{comp.description}</p>
-        </CardContent>
-      </Card>
-
-      {/* Company Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <Card>
-          <CardContent className="p-6 text-center">
-            <Users className="h-8 w-8 mx-auto mb-2 text-blue-500" />
-            <div className="text-2xl font-bold">{employees.length}</div>
-            <div className="text-sm text-muted-foreground">Employees</div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardContent className="p-6 text-center">
-            <ArrowRightLeft className="h-8 w-8 mx-auto mb-2 text-green-500" />
-            <div className="text-2xl font-bold">{comp.stats.totalTransfers}</div>
-            <div className="text-sm text-muted-foreground">Total Transfers</div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardContent className="p-6 text-center">
-            <TrendingUp className="h-8 w-8 mx-auto mb-2 text-orange-500" />
-            <div className="text-2xl font-bold">{comp.stats.successfulHires}</div>
-            <div className="text-sm text-muted-foreground">Successful Hires</div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardContent className="p-6 text-center">
-            <Star className="h-8 w-8 mx-auto mb-2 text-yellow-500 fill-current" />
-            <div className="text-2xl font-bold">{comp.stats.averageRating.toFixed(1)}</div>
-            <div className="text-sm text-muted-foreground">Average Rating</div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Team Members */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Users className="h-5 w-5" />
-            Team Members ({employees.length})
-          </CardTitle>
-          <CardDescription>
-            Current employees and their expertise
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {employees.length === 0 ? (
-            <div className="text-center py-8">
-              <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-medium mb-2">No Public Team Members</h3>
-              <p className="text-muted-foreground">
-                This company hasn't made their team members public yet.
-              </p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {employees.map((employee) => (
-                <Card key={employee.id} className="hover:shadow-md transition-shadow">
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-3 mb-3">
-                      <Avatar className="h-12 w-12">
-                        <AvatarImage src={employee.avatar} alt={`${employee.firstName} ${employee.lastName}`} />
-                        <AvatarFallback>
-                          {employee.firstName[0]}{employee.lastName[0]}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <h4 className="font-medium">
-                          {employee.firstName} {employee.lastName}
-                        </h4>
-                        <p className="text-sm text-muted-foreground">{employee.title}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1 text-sm">
-                        <Star className="h-4 w-4 fill-current text-yellow-500" />
-                        {employee.ratings.overall.toFixed(1)}
-                      </div>
-                      <Button variant="outline" size="sm" asChild>
-                        <Link href={`/profile/${employee.id}`}>
-                          <Eye className="mr-2 h-4 w-4" />
-                          View
-                        </Link>
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    </div>
-  );
 }

@@ -7,7 +7,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
 import { 
   MapPin, 
   Mail, 
@@ -15,20 +14,18 @@ import {
   Users,
   TrendingUp,
   ArrowRightLeft,
-  Search,
-  Filter,
   Star,
-  Eye,
-  UserPlus
+  Search,
+  UserPlus,
+  Eye
 } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
-import { getDevelopersByCompany, getTransferRequestsByCompany, mockDevelopers } from '@/data';
+import { getDevelopersByCompany, getTransferRequestsByCompany } from '@/data';
 import { Company } from '@/types';
 
 export default function CompanyDashboard() {
   const { currentUser } = useAppStore();
   const [activeTab, setActiveTab] = useState('overview');
-  const [searchTerm, setSearchTerm] = useState('');
   
   if (currentUser.role !== 'company') {
     return (
@@ -45,15 +42,6 @@ export default function CompanyDashboard() {
   const employees = getDevelopersByCompany(company.id);
   const transferRequests = getTransferRequestsByCompany(company.id);
   
-  // Filter available developers for browsing
-  const availableDevelopers = mockDevelopers.filter(dev => 
-    dev.availability === 'available' || dev.availability === 'employed'
-  ).filter(dev =>
-    searchTerm === '' || 
-    `${dev.firstName} ${dev.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    dev.technicalSkills.some(skill => skill.name.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
-
   const pendingRequests = transferRequests.filter(r => r.status === 'pending' || r.status === 'negotiating');
 
   return (
@@ -182,10 +170,9 @@ export default function CompanyDashboard() {
 
       {/* Main Content Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="employees">Team</TabsTrigger>
-          <TabsTrigger value="browse">Browse Developers</TabsTrigger>
           <TabsTrigger value="transfers">Transfer Activity</TabsTrigger>
         </TabsList>
         
@@ -294,93 +281,6 @@ export default function CompanyDashboard() {
           </Card>
         </TabsContent>
         
-        <TabsContent value="browse" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Browse Developers</CardTitle>
-              <CardDescription>
-                Discover and connect with talented developers
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {/* Search */}
-              <div className="flex gap-4 mb-6">
-                <div className="flex-1">
-                  <Input
-                    placeholder="Search by name or skills..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="max-w-sm"
-                  />
-                </div>
-                <Button variant="outline">
-                  <Filter className="mr-2 h-4 w-4" />
-                  Filters
-                </Button>
-              </div>
-              
-              {/* Developer List */}
-              <div className="space-y-4">
-                {availableDevelopers.slice(0, 5).map((developer) => (
-                  <div key={developer.id} className="flex items-center space-x-4 p-4 border rounded-lg hover:shadow-md transition-shadow">
-                    <Avatar className="h-12 w-12">
-                      <AvatarImage src={developer.avatar} alt={`${developer.firstName} ${developer.lastName}`} />
-                      <AvatarFallback>
-                        {developer.firstName[0]}{developer.lastName[0]}
-                      </AvatarFallback>
-                    </Avatar>
-                    
-                    <div className="flex-1">
-                      <h4 className="font-medium">
-                        {developer.firstName} {developer.lastName}
-                      </h4>
-                      <p className="text-sm text-muted-foreground mb-2">{developer.title}</p>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <MapPin className="h-3 w-3" />
-                        {developer.location}
-                        <span>•</span>
-                        <span>{developer.experience} years</span>
-                        <span>•</span>
-                        <div className="flex items-center gap-1">
-                          <Star className="h-3 w-3 fill-current text-yellow-500" />
-                          {developer.ratings.overall.toFixed(1)}
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="text-right">
-                      <div className="text-sm font-medium mb-1">
-                        ${(developer.marketValue.current / 1000).toFixed(0)}k
-                      </div>
-                      <Badge variant={developer.availability === 'available' ? 'default' : 'secondary'}>
-                        {developer.availability}
-                      </Badge>
-                    </div>
-                    
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
-                        <Eye className="mr-2 h-4 w-4" />
-                        View
-                      </Button>
-                      <Button size="sm">
-                        <UserPlus className="mr-2 h-4 w-4" />
-                        Contact
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="text-center mt-6">
-                <Button variant="outline" asChild>
-                  <Link href="/developers">
-                    View All Developers ({mockDevelopers.length})
-                  </Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
         
         <TabsContent value="transfers" className="mt-6">
           <Card>

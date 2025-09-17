@@ -10,8 +10,8 @@ export const mockCompanies: Company[] = [
     location: 'San Francisco, CA',
     size: 'medium',
     industry: 'SaaS',
-    description: 'Leading provider of workflow automation solutions for enterprise clients. We help companies streamline their operations through innovative software.',
-    employees: ['dev-1'],
+    description: 'Leading provider of workflow automation solutions for enterprise clients. We help companies streamline their operations through innovative software with a focus on scalable, cloud-native solutions.',
+    employees: ['dev-1', 'dev-2', 'dev-3', 'dev-4', 'dev-5', 'dev-6', 'dev-7', 'dev-8'],
     transferHistory: [
       {
         id: 'transfer-1',
@@ -23,13 +23,66 @@ export const mockCompanies: Company[] = [
         salary: 145000,
         completedAt: new Date('2023-01-15'),
         status: 'successful'
+      },
+      {
+        id: 'transfer-2',
+        developerId: 'dev-2',
+        fromCompanyId: 'comp-2',
+        toCompanyId: 'comp-1',
+        type: 'transfer',
+        transferFee: 28000,
+        salary: 135000,
+        completedAt: new Date('2023-03-10'),
+        status: 'successful'
+      },
+      {
+        id: 'transfer-3',
+        developerId: 'dev-3',
+        fromCompanyId: 'comp-3',
+        toCompanyId: 'comp-1',
+        type: 'loan',
+        transferFee: 15000,
+        salary: 160000,
+        completedAt: new Date('2023-05-20'),
+        status: 'successful'
+      },
+      {
+        id: 'transfer-4',
+        developerId: 'dev-4',
+        toCompanyId: 'comp-1',
+        type: 'transfer',
+        transferFee: 22000,
+        salary: 125000,
+        completedAt: new Date('2023-08-15'),
+        status: 'successful'
+      },
+      {
+        id: 'transfer-5',
+        developerId: 'dev-5',
+        fromCompanyId: 'comp-6',
+        toCompanyId: 'comp-1',
+        type: 'transfer',
+        transferFee: 32000,
+        salary: 155000,
+        completedAt: new Date('2023-11-05'),
+        status: 'successful'
+      },
+      {
+        id: 'transfer-6',
+        developerId: 'dev-6',
+        toCompanyId: 'comp-1',
+        type: 'loan',
+        transferFee: 18000,
+        salary: 140000,
+        completedAt: new Date('2024-01-20'),
+        status: 'successful'
       }
     ],
     stats: {
-      totalTransfers: 8,
-      totalLoans: 3,
+      totalTransfers: 15,
+      totalLoans: 8,
       averageRating: 4.6,
-      successfulHires: 12
+      successfulHires: 23
     },
     createdAt: new Date('2020-03-15'),
     updatedAt: new Date('2024-02-15')

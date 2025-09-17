@@ -445,5 +445,234 @@ export const mockDevelopers: Developer[] = [
     },
     createdAt: new Date('2021-11-10'),
     updatedAt: new Date('2024-02-05')
+  },
+
+  // Additional team members for TechFlow Solutions
+  {
+    id: 'dev-6',
+    firstName: 'David',
+    lastName: 'Rodriguez',
+    email: 'david.rodriguez@techflow.com',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop',
+    title: 'Frontend Architect',
+    location: 'San Francisco, CA',
+    availability: 'employed',
+    employmentType: 'employee',
+    currentCompanyId: 'comp-1',
+    previousCompanies: [
+      {
+        companyId: 'comp-2',
+        companyName: 'DataSphere Inc',
+        position: 'Senior Frontend Developer',
+        startDate: new Date('2019-03-01'),
+        endDate: new Date('2022-08-31'),
+        type: 'employment'
+      }
+    ],
+    technicalSkills: technicalSkills.frontend,
+    softSkills: [
+      { name: 'UI/UX Design', level: 5 },
+      { name: 'Team Leadership', level: 4 },
+      { name: 'Communication', level: 5 },
+      { name: 'Creative Problem Solving', level: 4 }
+    ],
+    ratings: {
+      performance: 9.1,
+      potential: 8.8,
+      overall: 9.0,
+      ratingsSources: [
+        {
+          type: 'employer',
+          companyId: 'comp-1',
+          rating: 9.1,
+          comment: 'Excellent frontend architecture decisions and team mentoring',
+          date: new Date('2024-01-15')
+        }
+      ]
+    },
+    achievements: [
+      {
+        id: '7',
+        type: 'project',
+        title: 'Component Design System',
+        description: 'Built a comprehensive React component library used across 20+ products',
+        date: new Date('2023-09-15'),
+        verified: true
+      },
+      achievements[2]
+    ],
+    marketValue: {
+      current: 148000,
+      suggested: 155000,
+      currency: 'USD',
+      lastUpdated: new Date('2024-02-01')
+    },
+    experience: 7,
+    hourlyRate: 85,
+    salaryExpectation: 150000,
+    bio: 'Frontend architect specializing in scalable React applications and design systems. Passionate about creating exceptional user experiences and leading frontend teams.',
+    portfolio: [
+      'https://davidrodriguez.dev',
+      'https://github.com/drodriguez-fe'
+    ],
+    socialLinks: {
+      github: 'https://github.com/drodriguez-fe',
+      linkedin: 'https://linkedin.com/in/david-rodriguez-frontend',
+      website: 'https://davidrodriguez.dev'
+    },
+    createdAt: new Date('2022-09-01'),
+    updatedAt: new Date('2024-02-01')
+  },
+
+  {
+    id: 'dev-7',
+    firstName: 'Lisa',
+    lastName: 'Wang',
+    email: 'lisa.wang@techflow.com',
+    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b1c0?w=150&h=150&fit=crop',
+    title: 'DevOps Engineer',
+    location: 'San Francisco, CA',
+    availability: 'employed',
+    employmentType: 'employee',
+    currentCompanyId: 'comp-1',
+    previousCompanies: [
+      {
+        companyId: 'comp-3',
+        companyName: 'CloudNative Systems',
+        position: 'Cloud Engineer',
+        startDate: new Date('2020-06-01'),
+        endDate: new Date('2023-02-28'),
+        type: 'employment'
+      }
+    ],
+    technicalSkills: technicalSkills.devops,
+    softSkills: [
+      { name: 'System Thinking', level: 5 },
+      { name: 'Problem Solving', level: 5 },
+      { name: 'Automation', level: 4 },
+      { name: 'Team Collaboration', level: 4 }
+    ],
+    ratings: {
+      performance: 9.3,
+      potential: 9.0,
+      overall: 9.2,
+      ratingsSources: [
+        {
+          type: 'employer',
+          companyId: 'comp-1',
+          rating: 9.3,
+          comment: 'Outstanding DevOps practices and infrastructure automation',
+          date: new Date('2024-01-30')
+        }
+      ]
+    },
+    achievements: [
+      {
+        id: '8',
+        type: 'project',
+        title: 'CI/CD Pipeline Optimization',
+        description: 'Reduced deployment time by 75% and improved system reliability to 99.95% uptime',
+        date: new Date('2023-11-10'),
+        verified: true
+      },
+      achievements[3]
+    ],
+    marketValue: {
+      current: 152000,
+      suggested: 160000,
+      currency: 'USD',
+      lastUpdated: new Date('2024-02-10')
+    },
+    experience: 6,
+    hourlyRate: 90,
+    salaryExpectation: 155000,
+    bio: 'DevOps engineer focused on cloud infrastructure, automation, and reliability. Expert in Kubernetes, AWS, and building scalable deployment pipelines.',
+    portfolio: [
+      'https://lisawang.dev',
+      'https://github.com/lisa-devops'
+    ],
+    socialLinks: {
+      github: 'https://github.com/lisa-devops',
+      linkedin: 'https://linkedin.com/in/lisa-wang-devops',
+      website: 'https://lisawang.dev'
+    },
+    createdAt: new Date('2023-03-01'),
+    updatedAt: new Date('2024-02-10')
+  },
+
+  {
+    id: 'dev-8',
+    firstName: 'James',
+    lastName: 'Thompson',
+    email: 'james.thompson@techflow.com', 
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop',
+    title: 'Product Engineer',
+    location: 'San Francisco, CA',
+    availability: 'employed',
+    employmentType: 'employee',
+    currentCompanyId: 'comp-1',
+    previousCompanies: [
+      {
+        companyId: 'comp-4',
+        companyName: 'MobileFirst Technologies',
+        position: 'Full Stack Developer',
+        startDate: new Date('2021-01-15'),
+        endDate: new Date('2023-06-30'),
+        type: 'employment'
+      }
+    ],
+    technicalSkills: technicalSkills.fullstack,
+    softSkills: [
+      { name: 'Product Thinking', level: 5 },
+      { name: 'User Empathy', level: 4 },
+      { name: 'Cross-functional Collaboration', level: 5 },
+      { name: 'Strategic Planning', level: 4 }
+    ],
+    ratings: {
+      performance: 8.9,
+      potential: 9.2,
+      overall: 9.0,
+      ratingsSources: [
+        {
+          type: 'employer',
+          companyId: 'comp-1',
+          rating: 8.9,
+          comment: 'Exceptional product sense and ability to translate business needs into technical solutions',
+          date: new Date('2024-02-05')
+        }
+      ]
+    },
+    achievements: [
+      {
+        id: '9',
+        type: 'project',
+        title: 'Customer Analytics Platform',
+        description: 'Built analytics platform that increased customer retention by 40% and reduced churn',
+        date: new Date('2023-12-01'),
+        verified: true
+      },
+      achievements[0]
+    ],
+    marketValue: {
+      current: 142000,
+      suggested: 150000,
+      currency: 'USD',
+      lastUpdated: new Date('2024-02-05')
+    },
+    experience: 5,
+    hourlyRate: 80,
+    salaryExpectation: 145000,
+    bio: 'Product-focused engineer with strong full-stack skills. Bridges the gap between technical implementation and business value, with a passion for user-centric solutions.',
+    portfolio: [
+      'https://jamesthompson.dev',
+      'https://github.com/james-product'
+    ],
+    socialLinks: {
+      github: 'https://github.com/james-product',
+      linkedin: 'https://linkedin.com/in/james-thompson-product',
+      website: 'https://jamesthompson.dev'
+    },
+    createdAt: new Date('2023-07-01'),
+    updatedAt: new Date('2024-02-05')
   }
 ];

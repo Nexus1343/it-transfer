@@ -54,6 +54,23 @@ export default function NegotiatePage() {
   const toCompany = getCompanyById(transfer.toCompanyId);
   const fromCompany = transfer.fromCompanyId ? getCompanyById(transfer.fromCompanyId) : null;
 
+  if (!toCompany) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-red-600">Company Not Found</h1>
+          <p className="text-muted-foreground mb-4">The company associated with this transfer was not found.</p>
+          <Button asChild>
+            <Link href="/transfers">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Transfers
+            </Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   const handleSendMessage = async () => {
     if (!message.trim() && !proposedSalary && !proposedTransferFee && !proposedStartDate) {
       toast.error('Please enter a message or propose new terms');
@@ -114,10 +131,9 @@ export default function NegotiatePage() {
                     <p>No messages yet. Start the conversation!</p>
                   </div>
                 ) : (
-                  transfer.negotiations.map((negotiation, index) => {
+                  transfer.negotiations.map((negotiation) => {
                     const isFromCurrentUser = 
-                      (currentUser.role === 'developer' && negotiation.fromRole === 'developer') ||
-                      (currentUser.role === 'company' && negotiation.fromRole === 'company');
+                      negotiation.fromRole === 'company' && negotiation.fromUserId === currentUser.id;
 
                     return (
                       <div
@@ -131,7 +147,7 @@ export default function NegotiatePage() {
                         } rounded-lg p-4`}>
                           <div className="flex items-center gap-2 mb-2">
                             <Badge variant={isFromCurrentUser ? 'secondary' : 'default'} className="text-xs">
-                              {negotiation.fromRole === 'developer' ? 'Developer' : 'Company'}
+                              Company
                             </Badge>
                             <span className="text-xs opacity-70">
                               {negotiation.timestamp.toLocaleDateString()} {negotiation.timestamp.toLocaleTimeString()}

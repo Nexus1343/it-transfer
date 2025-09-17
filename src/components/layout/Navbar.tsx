@@ -14,15 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { 
-  User, 
   Building2, 
   TrendingUp, 
   Newspaper, 
@@ -31,57 +23,27 @@ import {
   ArrowRightLeft,
   Search,
   Bell,
-  Settings
+  Settings,
+  User
 } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
-import { mockDevelopers, mockCompanies } from '@/data';
-import { UserRole, Developer, Company } from '@/types';
+import { Company } from '@/types';
 
 export function Navbar() {
   const router = useRouter();
   const [notifications] = useState(3); // Mock notification count
   
-  const {
-    currentUser,
-    switchUserRole,
-  } = useAppStore();
-
-  const handleRoleSwitch = (value: string) => {
-    const [role, userId] = value.split(':') as [UserRole, string];
-    switchUserRole(role, userId);
-    
-    // Navigate to appropriate dashboard
-    if (role === 'developer') {
-      router.push('/dashboard/developer');
-    } else {
-      router.push('/dashboard/company');
-    }
-  };
+  const { currentUser } = useAppStore();
 
   const getCurrentUserAvatar = () => {
-    if (currentUser.role === 'developer') {
-      return (currentUser.data as Developer).avatar;
-    } else {
-      return (currentUser.data as Company).logo;
-    }
+    return (currentUser.data as Company).logo;
   };
 
   const getCurrentUserName = () => {
-    if (currentUser.role === 'developer') {
-      const dev = currentUser.data as Developer;
-      return `${dev.firstName} ${dev.lastName}`;
-    } else {
-      return (currentUser.data as Company).name;
-    }
+    return (currentUser.data as Company).name;
   };
 
-  const navigationItems = currentUser.role === 'developer' ? [
-    { href: '/dashboard/developer', label: 'Dashboard', icon: User },
-    { href: '/marketplace', label: 'Opportunities', icon: Search },
-    { href: '/transfers', label: 'My Transfers', icon: ArrowRightLeft },
-    { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
-    { href: '/news', label: 'Transfer News', icon: Newspaper },
-  ] : [
+  const navigationItems = [
     { href: '/dashboard/company', label: 'Dashboard', icon: Building2 },
     { href: '/developers', label: 'Browse Developers', icon: Users },
     { href: '/transfers', label: 'Transfer History', icon: ArrowRightLeft },
@@ -100,19 +62,10 @@ export function Navbar() {
               <span className="text-xl font-bold">IT Transfer Market</span>
             </Link>
             
-            {/* Role Badge */}
-            <Badge variant={currentUser.role === 'developer' ? 'default' : 'secondary'}>
-              {currentUser.role === 'developer' ? (
-                <>
-                  <User className="mr-1 h-3 w-3" />
-                  Developer
-                </>
-              ) : (
-                <>
-                  <Building2 className="mr-1 h-3 w-3" />
-                  Company
-                </>
-              )}
+            {/* Company Badge */}
+            <Badge variant="secondary">
+              <Building2 className="mr-1 h-3 w-3" />
+              Company
             </Badge>
           </div>
 
@@ -138,52 +91,6 @@ export function Navbar() {
 
           {/* Right Side Actions */}
           <div className="flex items-center space-x-4">
-            {/* Role Switcher */}
-            <div className="hidden sm:block">
-              <Select
-                value={`${currentUser.role}:${currentUser.id}`}
-                onValueChange={handleRoleSwitch}
-              >
-                <SelectTrigger className="w-48">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <DropdownMenuLabel>Switch Role</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  
-                  <DropdownMenuLabel className="text-xs font-normal text-muted-foreground">
-                    DEVELOPERS
-                  </DropdownMenuLabel>
-                  {mockDevelopers.map((dev) => (
-                    <SelectItem
-                      key={dev.id}
-                      value={`developer:${dev.id}`}
-                    >
-                      <div className="flex items-center space-x-2">
-                        <User className="h-3 w-3" />
-                        <span>{dev.firstName} {dev.lastName}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                  
-                  <DropdownMenuSeparator />
-                  <DropdownMenuLabel className="text-xs font-normal text-muted-foreground">
-                    COMPANIES
-                  </DropdownMenuLabel>
-                  {mockCompanies.map((company) => (
-                    <SelectItem
-                      key={company.id}
-                      value={`company:${company.id}`}
-                    >
-                      <div className="flex items-center space-x-2">
-                        <Building2 className="h-3 w-3" />
-                        <span>{company.name}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
 
             {/* Notifications */}
             <Button variant="ghost" size="icon" className="relative">
@@ -220,10 +127,7 @@ export function Navbar() {
                       {getCurrentUserName()}
                     </p>
                     <p className="text-xs leading-none text-muted-foreground">
-                      {currentUser.role === 'developer' 
-                        ? (currentUser.data as Developer).email 
-                        : (currentUser.data as Company).email
-                      }
+                      {(currentUser.data as Company).email}
                     </p>
                   </div>
                 </DropdownMenuLabel>

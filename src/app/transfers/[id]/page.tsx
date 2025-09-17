@@ -20,8 +20,6 @@ import {
   MessageCircle,
   DollarSign,
   Calendar,
-  Building2,
-  User,
   HandCoins,
   MessageSquare,
   AlertTriangle,
@@ -33,7 +31,7 @@ import {
 } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import { getTransferRequestById, getDeveloperById, getCompanyById } from '@/data';
-import { TransferRequest, Negotiation } from '@/types';
+import { TransferRequest } from '@/types';
 import { toast } from 'sonner';
 
 interface CounterOfferDialogProps {
@@ -166,6 +164,23 @@ export default function TransferDetailsPage() {
   const toCompany = getCompanyById(transfer.toCompanyId);
   const fromCompany = transfer.fromCompanyId ? getCompanyById(transfer.fromCompanyId) : null;
 
+  if (!toCompany) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-red-600">Company Not Found</h1>
+          <p className="text-muted-foreground mb-4">The company associated with this transfer was not found.</p>
+          <Button asChild>
+            <Link href="/transfers">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Transfers
+            </Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   const getStatusIcon = (status: TransferRequest['status']) => {
     switch (status) {
       case 'pending':
@@ -222,8 +237,7 @@ export default function TransferDetailsPage() {
   };
 
   const canTakeAction = (transfer.status === 'pending' || transfer.status === 'negotiating') && 
-    ((currentUser.role === 'developer' && transfer.developerId === currentUser.id) ||
-     (currentUser.role === 'company' && (transfer.fromCompanyId === currentUser.id || transfer.toCompanyId === currentUser.id)));
+    (transfer.fromCompanyId === currentUser.id || transfer.toCompanyId === currentUser.id);
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
@@ -498,10 +512,9 @@ export default function TransferDetailsPage() {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {transfer.negotiations.map((negotiation, index) => {
+                  {transfer.negotiations.map((negotiation) => {
                     const isFromCurrentUser = 
-                      (currentUser.role === 'developer' && negotiation.fromRole === 'developer') ||
-                      (currentUser.role === 'company' && negotiation.fromRole === 'company');
+                      negotiation.fromRole === 'company' && negotiation.fromUserId === currentUser.id;
 
                     return (
                       <div
@@ -515,7 +528,7 @@ export default function TransferDetailsPage() {
                         } rounded-lg p-4`}>
                           <div className="flex items-center gap-2 mb-2">
                             <Badge variant={isFromCurrentUser ? 'secondary' : 'default'} className="text-xs">
-                              {negotiation.fromRole === 'developer' ? 'Developer' : 'Company'}
+                              Company
                             </Badge>
                             <span className="text-xs opacity-70">
                               {negotiation.timestamp.toLocaleDateString()} {negotiation.timestamp.toLocaleTimeString()}

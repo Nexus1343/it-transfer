@@ -1,5 +1,5 @@
-// User Roles
-export type UserRole = 'developer' | 'company';
+// User Roles (only companies are users now, developers are just data)
+export type UserRole = 'company';
 
 // Developer Types
 export interface Developer {
@@ -199,7 +199,7 @@ export interface DeveloperApplication {
 
 export interface Negotiation {
   id: string;
-  fromRole: 'developer' | 'company';
+  fromRole: 'company'; // Only companies negotiate now
   fromUserId: string;
   message: string;
   proposalChanges?: {
@@ -271,7 +271,7 @@ export interface AppState {
   currentUser: {
     role: UserRole;
     id: string;
-    data: Developer | Company;
+    data: Company;
   };
   
   // Data

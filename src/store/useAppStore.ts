@@ -21,7 +21,7 @@ interface AppStore extends AppState {
   
   // Computed
   getFilteredDevelopers: () => Developer[];
-  getCurrentUserData: () => Developer | Company | null;
+  getCurrentUserData: () => Company;
 }
 
 const defaultFilters: DeveloperFilters = {
@@ -39,9 +39,9 @@ export const useAppStore = create<AppStore>()(
     (set, get) => ({
       // Initial state
       currentUser: {
-        role: 'developer',
-        id: 'dev-1',
-        data: mockDevelopers[0]
+        role: 'company',
+        id: 'comp-1',
+        data: mockCompanies[0]
       },
       developers: mockDevelopers,
       companies: mockCompanies,
@@ -54,9 +54,7 @@ export const useAppStore = create<AppStore>()(
 
       // Actions
       switchUserRole: (role: UserRole, userId: string) => {
-        const data = role === 'developer' 
-          ? getDeveloperById(userId)
-          : getCompanyById(userId);
+        const data = getCompanyById(userId);
         
         if (data) {
           set({
@@ -158,7 +156,7 @@ export const useAppStore = create<AppStore>()(
 
       getCurrentUserData: () => {
         const { currentUser } = get();
-        return currentUser.data;
+        return currentUser.data as Company;
       },
     }),
     {

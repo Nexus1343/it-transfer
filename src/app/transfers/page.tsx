@@ -4,10 +4,9 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   ArrowRightLeft, 
   Clock,
@@ -24,12 +23,11 @@ import {
   X
 } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
-import { getTransferRequestsByDeveloper, getTransferRequestsByCompany, getDeveloperById, getCompanyById } from '@/data';
+import { getTransferRequestsByCompany, getDeveloperById, getCompanyById } from '@/data';
 import { TransferRequest } from '@/types';
 
 export default function TransfersPage() {
   const { currentUser } = useAppStore();
-  const [activeTab, setActiveTab] = useState('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const searchParams = useSearchParams();
@@ -42,10 +40,8 @@ export default function TransfersPage() {
     }
   }, [searchParams]);
 
-  // Get transfer requests based on user role
-  const transferRequests = currentUser.role === 'developer' 
-    ? getTransferRequestsByDeveloper(currentUser.id)
-    : getTransferRequestsByCompany(currentUser.id);
+  // Get transfer requests for company
+  const transferRequests = getTransferRequestsByCompany(currentUser.id);
 
   // Filter by status
   const filteredRequests = filterStatus === 'all' 
@@ -93,7 +89,6 @@ export default function TransfersPage() {
   const renderTransferCard = (request: TransferRequest) => {
     const developer = request.developerId ? getDeveloperById(request.developerId) : null;
     const toCompany = getCompanyById(request.toCompanyId);
-    const fromCompany = request.fromCompanyId ? getCompanyById(request.fromCompanyId) : null;
 
     if (!toCompany) return null;
 
@@ -331,21 +326,16 @@ export default function TransfersPage() {
         <div>
           <h1 className="text-3xl font-bold mb-2">Transfer Management</h1>
           <p className="text-muted-foreground">
-            {currentUser.role === 'developer' 
-              ? 'Manage your transfer requests and opportunities' 
-              : 'Track and manage your company\'s transfer activities'
-            }
+            Track and manage your company&apos;s transfer activities
           </p>
         </div>
         
-        {currentUser.role === 'company' && (
-          <Button asChild>
-            <Link href="/transfers/new">
-              <Plus className="mr-2 h-4 w-4" />
-              Create Transfer Placement
-            </Link>
-          </Button>
-        )}
+        <Button asChild>
+          <Link href="/transfers/new">
+            <Plus className="mr-2 h-4 w-4" />
+            Create Transfer Placement
+          </Link>
+        </Button>
       </div>
 
       {/* Stats Cards */}
@@ -424,13 +414,11 @@ export default function TransfersPage() {
               </h3>
               <p className="text-muted-foreground mb-6">
                 {transferRequests.length === 0 
-                  ? currentUser.role === 'developer'
-                    ? 'You don\'t have any transfer requests yet. Companies will reach out when interested.'
-                    : 'You haven\'t created any transfer requests yet. Start by browsing developers.'
+                  ? 'You haven\'t created any transfer requests yet. Start by browsing developers.'
                   : 'Try adjusting your filter to see more results.'
                 }
               </p>
-              {currentUser.role === 'company' && transferRequests.length === 0 && (
+              {transferRequests.length === 0 && (
                 <Button asChild>
                   <Link href="/developers">
                     <TrendingUp className="mr-2 h-4 w-4" />

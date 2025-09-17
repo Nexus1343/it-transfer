@@ -51,6 +51,120 @@ export const mockTransferRequests: TransferRequest[] = [
     createdAt: new Date('2024-02-20'),
     updatedAt: new Date('2024-02-22')
   },
+  
+  {
+    id: 'req-pending-1',
+    type: 'loan',
+    placementType: 'employee_listing',
+    developerId: 'dev-2',
+    fromCompanyId: 'comp-1',
+    toCompanyId: 'comp-3',
+    status: 'pending',
+    proposedSalary: 145000,
+    currentSalary: 135000,
+    loanDuration: 12,
+    loanStartDate: new Date('2024-04-01'),
+    negotiations: [],
+    createdAt: new Date('2024-02-25'),
+    updatedAt: new Date('2024-02-25')
+  },
+  
+  {
+    id: 'req-approved-1',
+    type: 'transfer',
+    placementType: 'employee_listing',
+    developerId: 'dev-3',
+    fromCompanyId: 'comp-1',
+    toCompanyId: 'comp-6',
+    status: 'approved',
+    transferFee: 42000,
+    proposedSalary: 185000,
+    currentSalary: 160000,
+    negotiations: [
+      {
+        id: 'neg-approved-1',
+        fromRole: 'company',
+        fromUserId: 'comp-6',
+        message: 'We are thrilled to bring Priya to our DevOps team. Her expertise aligns perfectly with our infrastructure goals.',
+        proposalChanges: {
+          salary: 185000,
+          transferFee: 42000,
+          startDate: new Date('2024-03-15')
+        },
+        timestamp: new Date('2024-02-15T09:00:00Z')
+      }
+    ],
+    createdAt: new Date('2024-02-15'),
+    updatedAt: new Date('2024-02-26'),
+    approvedAt: new Date('2024-02-26')
+  },
+  
+  {
+    id: 'req-rejected-1',
+    type: 'transfer',
+    placementType: 'employee_listing', 
+    developerId: 'dev-4',
+    fromCompanyId: 'comp-1',
+    toCompanyId: 'comp-9',
+    status: 'rejected',
+    proposedSalary: 120000,
+    currentSalary: 125000,
+    transferFee: 15000,
+    negotiations: [
+      {
+        id: 'neg-rejected-1',
+        fromRole: 'company',
+        fromUserId: 'comp-9',
+        message: 'Thank you for considering us. After careful evaluation, we have decided to pursue other candidates.',
+        timestamp: new Date('2024-02-10T16:30:00Z')
+      }
+    ],
+    createdAt: new Date('2024-02-08'),
+    updatedAt: new Date('2024-02-10')
+  },
+  
+  {
+    id: 'req-completed-1',
+    type: 'loan',
+    placementType: 'employee_listing',
+    developerId: 'dev-6',
+    fromCompanyId: 'comp-1',
+    toCompanyId: 'comp-4',
+    status: 'completed',
+    proposedSalary: 135000,
+    currentSalary: 140000,
+    loanDuration: 6,
+    loanStartDate: new Date('2024-01-15'),
+    negotiations: [],
+    createdAt: new Date('2024-01-05'),
+    updatedAt: new Date('2024-01-20')
+  },
+  
+  {
+    id: 'req-cancelled-1',
+    type: 'transfer',
+    placementType: 'developer_search',
+    toCompanyId: 'comp-1',
+    status: 'cancelled',
+    proposedSalary: 150000,
+    salaryRange: {
+      min: 140000,
+      max: 160000
+    },
+    requirements: {
+      skills: ['React', 'Node.js', 'TypeScript', 'PostgreSQL'],
+      experience: {
+        min: 4,
+        max: 8
+      },
+      location: 'San Francisco, CA',
+      employmentType: 'full-time',
+      description: 'Senior Full Stack Developer for enterprise workflow platform'
+    },
+    negotiations: [],
+    createdAt: new Date('2024-01-20'),
+    updatedAt: new Date('2024-02-01')
+  },
 
   {
     id: 'req-2',
