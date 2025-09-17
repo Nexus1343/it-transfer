@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import { getDevelopersByCompany, getTransferRequestsByCompany } from '@/data';
+import { formatCurrency, formatDate } from '@/lib/utils';
 import { Company } from '@/types';
 
 export default function CompanyDashboard() {
@@ -205,10 +206,10 @@ export default function CompanyDashboard() {
                           {request.type === 'transfer' ? 'Transfer' : 'Loan'} request for developer
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          Status: {request.status} • ${request.proposedSalary.toLocaleString()}
+                          Status: {request.status} • {formatCurrency(request.proposedSalary)}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          {request.createdAt.toLocaleDateString()}
+                          {formatDate(request.createdAt)}
                         </p>
                       </div>
                     </div>
@@ -322,19 +323,19 @@ export default function CompanyDashboard() {
                           </span>
                         </div>
                         <span className="text-sm text-muted-foreground">
-                          {request.createdAt.toLocaleDateString()}
+                          {formatDate(request.createdAt)}
                         </span>
                       </div>
                       
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm mb-3">
                         <div>
                           <span className="text-muted-foreground">Proposed Salary:</span>
-                          <div className="font-medium">${request.proposedSalary.toLocaleString()}</div>
+                          <div className="font-medium">{formatCurrency(request.proposedSalary)}</div>
                         </div>
                         {request.transferFee && (
                           <div>
                             <span className="text-muted-foreground">Transfer Fee:</span>
-                            <div className="font-medium">${request.transferFee.toLocaleString()}</div>
+                            <div className="font-medium">{formatCurrency(request.transferFee)}</div>
                           </div>
                         )}
                         {request.loanDuration && (
@@ -347,7 +348,7 @@ export default function CompanyDashboard() {
                       
                       <div className="flex items-center justify-between pt-3 border-t">
                         <span className="text-sm text-muted-foreground">
-                          {request.negotiations.length} message(s) • Updated {request.updatedAt.toLocaleDateString()}
+                          {request.negotiations.length} message(s) • Updated {formatDate(request.updatedAt)}
                         </span>
                         <div className="flex gap-2">
                           <Button variant="outline" size="sm">
