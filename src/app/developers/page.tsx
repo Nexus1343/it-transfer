@@ -25,12 +25,15 @@ import {
 import { useAppStore } from '@/store/useAppStore';
 import { mockDevelopers } from '@/data';
 import { Developer } from '@/types';
+import { OfferDialog } from '@/components/OfferDialog';
 
 export default function DevelopersPage() {
   const { currentUser, getFilteredDevelopers, setFilters, filters } = useAppStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<string>('market_value_desc');
   const [availabilityFilter, setAvailabilityFilter] = useState<string>('all');
+  const [isOfferDialogOpen, setIsOfferDialogOpen] = useState(false);
+  const [selectedDeveloperForOffer, setSelectedDeveloperForOffer] = useState<Developer | null>(null);
 
   // Apply filters
   const filteredDevelopers = getFilteredDevelopers();
@@ -67,8 +70,13 @@ export default function DevelopersPage() {
   });
 
   const handleMakeOffer = (developer: Developer) => {
-    // Navigate to transfer wizard to make an offer to the developer's current company
-    window.location.href = `/transfers/new?developerId=${developer.id}`;
+    setSelectedDeveloperForOffer(developer);
+    setIsOfferDialogOpen(true);
+  };
+
+  const handleCloseOfferDialog = () => {
+    setIsOfferDialogOpen(false);
+    setSelectedDeveloperForOffer(null);
   };
 
   return (
@@ -301,6 +309,15 @@ export default function DevelopersPage() {
             Load More Developers
           </Button>
         </div>
+      )}
+
+      {/* Offer Dialog */}
+      {selectedDeveloperForOffer && (
+        <OfferDialog 
+          isOpen={isOfferDialogOpen}
+          onClose={handleCloseOfferDialog}
+          developer={selectedDeveloperForOffer}
+        />
       )}
     </div>
   );
