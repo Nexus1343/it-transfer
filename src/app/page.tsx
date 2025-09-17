@@ -172,7 +172,7 @@ export default function Home() {
                           {news.description.substring(0, 100)}...
                         </p>
                         <div className="text-xs text-muted-foreground mt-2">
-                          {news.timestamp.toLocaleDateString()}
+                          {news.timestamp.toLocaleDateString('en-US')}
                         </div>
                       </div>
                     </div>

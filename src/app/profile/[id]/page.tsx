@@ -165,17 +165,17 @@ export default function ProfilePage() {
               {/* Social Links */}
               <div className="flex items-center gap-4 mb-4">
                 {dev.socialLinks.github && (
-                  <a href={dev.socialLinks.github} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground">
+                  <a href={dev.socialLinks.github} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground cursor-pointer">
                     <Github className="h-5 w-5" />
                   </a>
                 )}
                 {dev.socialLinks.linkedin && (
-                  <a href={dev.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground">
+                  <a href={dev.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground cursor-pointer">
                     <Linkedin className="h-5 w-5" />
                   </a>
                 )}
                 {dev.socialLinks.website && (
-                  <a href={dev.socialLinks.website} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground">
+                  <a href={dev.socialLinks.website} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground cursor-pointer">
                     <Globe className="h-5 w-5" />
                   </a>
                 )}
@@ -365,7 +365,7 @@ export default function ProfilePage() {
                           href={achievement.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-blue-600 hover:underline flex items-center gap-1 text-sm"
+                          className="text-blue-600 hover:underline flex items-center gap-1 text-sm cursor-pointer"
                         >
                           View <ExternalLink className="h-3 w-3" />
                         </a>
@@ -475,11 +475,11 @@ export default function ProfilePage() {
             </div>
 
             <div className="flex items-center gap-4">
-              <a href={comp.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+              <a href={comp.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline cursor-pointer">
                 <Globe className="h-4 w-4 inline mr-1" />
                 {comp.website}
               </a>
-              <a href={`mailto:${comp.email}`} className="text-muted-foreground hover:text-foreground">
+              <a href={`mailto:${comp.email}`} className="text-muted-foreground hover:text-foreground cursor-pointer">
                 <Mail className="h-4 w-4 inline mr-1" />
                 {comp.email}
               </a>

@@ -87,7 +87,7 @@ export default function CompanyDashboard() {
               </div>
               <div className="flex items-center gap-1">
                 <Globe className="h-4 w-4" />
-                <a href={company.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                <a href={company.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline cursor-pointer">
                   {company.website}
                 </a>
               </div>

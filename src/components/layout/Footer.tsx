@@ -18,19 +18,19 @@ export function Footer() {
             <div className="flex space-x-4">
               <Link 
                 href="https://github.com" 
-                className="text-muted-foreground hover:text-foreground"
+                className="text-muted-foreground hover:text-foreground cursor-pointer"
               >
                 <Github className="h-4 w-4" />
               </Link>
               <Link 
                 href="https://twitter.com" 
-                className="text-muted-foreground hover:text-foreground"
+                className="text-muted-foreground hover:text-foreground cursor-pointer"
               >
                 <Twitter className="h-4 w-4" />
               </Link>
               <Link 
                 href="https://linkedin.com" 
-                className="text-muted-foreground hover:text-foreground"
+                className="text-muted-foreground hover:text-foreground cursor-pointer"
               >
                 <Linkedin className="h-4 w-4" />
               </Link>
@@ -42,22 +42,22 @@ export function Footer() {
             <h3 className="text-sm font-semibold">For Developers</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <Link href="/how-it-works" className="hover:text-foreground">
+                <Link href="/how-it-works" className="hover:text-foreground cursor-pointer">
                   How It Works
                 </Link>
               </li>
               <li>
-                <Link href="/profile-tips" className="hover:text-foreground">
+                <Link href="/profile-tips" className="hover:text-foreground cursor-pointer">
                   Profile Tips
                 </Link>
               </li>
               <li>
-                <Link href="/career-growth" className="hover:text-foreground">
+                <Link href="/career-growth" className="hover:text-foreground cursor-pointer">
                   Career Growth
                 </Link>
               </li>
               <li>
-                <Link href="/success-stories" className="hover:text-foreground">
+                <Link href="/success-stories" className="hover:text-foreground cursor-pointer">
                   Success Stories
                 </Link>
               </li>
@@ -69,22 +69,22 @@ export function Footer() {
             <h3 className="text-sm font-semibold">For Companies</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <Link href="/talent-acquisition" className="hover:text-foreground">
+                <Link href="/talent-acquisition" className="hover:text-foreground cursor-pointer">
                   Talent Acquisition
                 </Link>
               </li>
               <li>
-                <Link href="/pricing" className="hover:text-foreground">
+                <Link href="/pricing" className="hover:text-foreground cursor-pointer">
                   Pricing
                 </Link>
               </li>
               <li>
-                <Link href="/case-studies" className="hover:text-foreground">
+                <Link href="/case-studies" className="hover:text-foreground cursor-pointer">
                   Case Studies
                 </Link>
               </li>
               <li>
-                <Link href="/enterprise" className="hover:text-foreground">
+                <Link href="/enterprise" className="hover:text-foreground cursor-pointer">
                   Enterprise
                 </Link>
               </li>
@@ -96,22 +96,22 @@ export function Footer() {
             <h3 className="text-sm font-semibold">Support</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <Link href="/help" className="hover:text-foreground">
+                <Link href="/help" className="hover:text-foreground cursor-pointer">
                   Help Center
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-foreground">
+                <Link href="/contact" className="hover:text-foreground cursor-pointer">
                   Contact Us
                 </Link>
               </li>
               <li>
-                <Link href="/legal" className="hover:text-foreground">
+                <Link href="/legal" className="hover:text-foreground cursor-pointer">
                   Legal
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="hover:text-foreground">
+                <Link href="/privacy" className="hover:text-foreground cursor-pointer">
                   Privacy Policy
                 </Link>
               </li>

@@ -253,7 +253,7 @@ export default function DeveloperDashboard() {
                       <Github className="h-4 w-4" />
                       <a 
                         href={developer.socialLinks.github} 
-                        className="text-blue-600 hover:underline" 
+                        className="text-blue-600 hover:underline cursor-pointer" 
                         target="_blank" 
                         rel="noopener noreferrer"
                       >
@@ -267,7 +267,7 @@ export default function DeveloperDashboard() {
                       <Linkedin className="h-4 w-4" />
                       <a 
                         href={developer.socialLinks.linkedin} 
-                        className="text-blue-600 hover:underline" 
+                        className="text-blue-600 hover:underline cursor-pointer" 
                         target="_blank" 
                         rel="noopener noreferrer"
                       >
@@ -281,7 +281,7 @@ export default function DeveloperDashboard() {
                       <Globe className="h-4 w-4" />
                       <a 
                         href={developer.socialLinks.website} 
-                        className="text-blue-600 hover:underline" 
+                        className="text-blue-600 hover:underline cursor-pointer" 
                         target="_blank" 
                         rel="noopener noreferrer"
                       >
@@ -426,7 +426,7 @@ export default function DeveloperDashboard() {
                         href={achievement.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline flex items-center gap-1"
+                        className="text-blue-600 hover:underline flex items-center gap-1 cursor-pointer"
                       >
                         View <ExternalLink className="h-3 w-3" />
                       </a>
