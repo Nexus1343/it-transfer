@@ -46,6 +46,7 @@ export function Navbar() {
   const navigationItems = [
     { href: '/dashboard/company', label: 'Dashboard', icon: Building2 },
     { href: '/developers', label: 'Browse Developers', icon: Users },
+    { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
     { href: '/transfers', label: 'Transfer History', icon: ArrowRightLeft },
     { href: '/analytics', label: 'Analytics', icon: TrendingUp },
     { href: '/news', label: 'Market News', icon: Newspaper },
