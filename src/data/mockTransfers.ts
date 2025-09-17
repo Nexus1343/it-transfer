@@ -39,7 +39,9 @@ export const mockTransferRequests: TransferRequest[] = [
   {
     id: 'req-1',
     type: 'transfer',
+    placementType: 'employee_listing',
     developerId: 'dev-5',
+    fromCompanyId: 'comp-1',
     toCompanyId: 'comp-7',
     status: 'negotiating',
     transferFee: 35000,
@@ -53,10 +55,24 @@ export const mockTransferRequests: TransferRequest[] = [
   {
     id: 'req-2',
     type: 'loan',
-    developerId: 'dev-2',
+    placementType: 'developer_search',
     toCompanyId: 'comp-8',
     status: 'pending',
     proposedSalary: 140000,
+    salaryRange: {
+      min: 130000,
+      max: 150000
+    },
+    requirements: {
+      skills: ['Node.js', 'React', 'AWS', 'Docker'],
+      experience: {
+        min: 3,
+        max: 8
+      },
+      location: 'Remote',
+      employmentType: 'loan',
+      description: 'Full-stack developer for IoT platform development'
+    },
     loanDuration: 6,
     loanStartDate: new Date('2024-03-15'),
     trialPeriod: {
@@ -83,6 +99,7 @@ export const mockTransferRequests: TransferRequest[] = [
   {
     id: 'req-3',
     type: 'transfer',
+    placementType: 'employee_listing',
     developerId: 'dev-4',
     fromCompanyId: 'comp-4',
     toCompanyId: 'comp-9',
@@ -118,13 +135,24 @@ export const mockTransferRequests: TransferRequest[] = [
   {
     id: 'req-4',
     type: 'transfer',
-    developerId: 'dev-1',
-    fromCompanyId: 'comp-1',
+    placementType: 'developer_search',
     toCompanyId: 'comp-10',
     status: 'rejected',
-    transferFee: 40000,
     proposedSalary: 155000,
-    currentSalary: 145000,
+    salaryRange: {
+      min: 140000,
+      max: 170000
+    },
+    requirements: {
+      skills: ['React', 'TypeScript', 'GraphQL', 'Healthcare Systems'],
+      experience: {
+        min: 5,
+        max: 10
+      },
+      location: 'San Francisco, CA',
+      employmentType: 'full-time',
+      description: 'Senior Frontend Developer for healthcare platform patient portal'
+    },
     negotiations: [
       {
         id: 'neg-7',
@@ -152,6 +180,7 @@ export const mockTransferRequests: TransferRequest[] = [
   {
     id: 'req-5',
     type: 'loan',
+    placementType: 'employee_listing',
     developerId: 'dev-3',
     fromCompanyId: 'comp-3',
     toCompanyId: 'comp-2',
@@ -188,10 +217,24 @@ export const mockTransferRequests: TransferRequest[] = [
   {
     id: 'req-6',
     type: 'transfer',
-    developerId: 'dev-2',
+    placementType: 'developer_search',
     toCompanyId: 'comp-7',
     status: 'pending',
     proposedSalary: 145000,
+    salaryRange: {
+      min: 130000,
+      max: 160000
+    },
+    requirements: {
+      skills: ['Python', 'Machine Learning', 'TensorFlow', 'Full-stack Development'],
+      experience: {
+        min: 4,
+        max: 8
+      },
+      location: 'Boston, MA / Remote',
+      employmentType: 'full-time',
+      description: 'Full-stack developer transitioning into AI development'
+    },
     trialPeriod: {
       duration: 45,
       terms: '45-day trial period with AI/ML project evaluation'

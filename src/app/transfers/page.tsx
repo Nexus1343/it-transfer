@@ -91,11 +91,11 @@ export default function TransfersPage() {
   };
 
   const renderTransferCard = (request: TransferRequest) => {
-    const developer = getDeveloperById(request.developerId);
+    const developer = request.developerId ? getDeveloperById(request.developerId) : null;
     const toCompany = getCompanyById(request.toCompanyId);
     const fromCompany = request.fromCompanyId ? getCompanyById(request.fromCompanyId) : null;
 
-    if (!developer || !toCompany) return null;
+    if (!toCompany) return null;
 
     return (
       <Card key={request.id} className="hover:shadow-md transition-shadow">
@@ -108,7 +108,10 @@ export default function TransfersPage() {
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="font-semibold">
-                    {request.type === 'transfer' ? 'Transfer' : 'Loan'} Request
+                    {request.placementType === 'employee_listing' 
+                      ? `Employee ${request.type === 'transfer' ? 'Transfer' : 'Loan'} Listing`
+                      : `Developer ${request.type === 'transfer' ? 'Position' : 'Project'} Search`
+                    }
                   </h3>
                   <Badge className={`${getStatusColor(request.status)} border`}>
                     {getStatusIcon(request.status)}
@@ -122,58 +125,128 @@ export default function TransfersPage() {
             </div>
             <div className="text-right">
               <div className="text-lg font-bold text-primary">
-                ${request.proposedSalary.toLocaleString()}
+                {request.placementType === 'employee_listing' || request.proposedSalary ? (
+                  `$${request.proposedSalary.toLocaleString()}`
+                ) : (
+                  request.salaryRange 
+                    ? `$${request.salaryRange.min.toLocaleString()} - $${request.salaryRange.max.toLocaleString()}`
+                    : 'Negotiable'
+                )}
               </div>
-              <p className="text-xs text-muted-foreground">Proposed Salary</p>
+              <p className="text-xs text-muted-foreground">
+                {request.placementType === 'employee_listing' 
+                  ? 'Min Salary' 
+                  : request.salaryRange ? 'Salary Range' : 'Salary'
+                }
+              </p>
             </div>
           </div>
         </CardHeader>
         
         <CardContent className="pt-0">
-          {/* Participants */}
+          {/* Participants or Job Info */}
           <div className="space-y-3 mb-4">
-            <div className="flex items-center gap-3">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src={developer.avatar} alt={`${developer.firstName} ${developer.lastName}`} />
-                <AvatarFallback className="text-xs">
-                  {developer.firstName[0]}{developer.lastName[0]}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex-1">
-                <p className="font-medium text-sm">{developer.firstName} {developer.lastName}</p>
-                <p className="text-xs text-muted-foreground">{developer.title}</p>
-              </div>
-              <User className="h-4 w-4 text-muted-foreground" />
-            </div>
-            
-            <div className="flex items-center justify-center">
-              <ArrowRightLeft className="h-4 w-4 text-muted-foreground" />
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src={toCompany.logo} alt={toCompany.name} />
-                <AvatarFallback className="text-xs">
-                  {toCompany.name.substring(0, 2)}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex-1">
-                <p className="font-medium text-sm">{toCompany.name}</p>
-                <p className="text-xs text-muted-foreground">{toCompany.industry}</p>
-              </div>
-              <Building2 className="h-4 w-4 text-muted-foreground" />
-            </div>
+            {request.placementType === 'employee_listing' && developer ? (
+              <>
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={developer.avatar} alt={`${developer.firstName} ${developer.lastName}`} />
+                    <AvatarFallback className="text-xs">
+                      {developer.firstName[0]}{developer.lastName[0]}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1">
+                    <p className="font-medium text-sm">{developer.firstName} {developer.lastName}</p>
+                    <p className="text-xs text-muted-foreground">{developer.title}</p>
+                  </div>
+                  <User className="h-4 w-4 text-muted-foreground" />
+                </div>
+                
+                <div className="flex items-center justify-center">
+                  <ArrowRightLeft className="h-4 w-4 text-muted-foreground" />
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={toCompany.logo} alt={toCompany.name} />
+                    <AvatarFallback className="text-xs">
+                      {toCompany.name.substring(0, 2)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1">
+                    <p className="font-medium text-sm">{toCompany.name}</p>
+                    <p className="text-xs text-muted-foreground">{toCompany.industry}</p>
+                  </div>
+                  <Building2 className="h-4 w-4 text-muted-foreground" />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={toCompany.logo} alt={toCompany.name} />
+                    <AvatarFallback className="text-xs">
+                      {toCompany.name.substring(0, 2)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1">
+                    <p className="font-medium text-sm">{toCompany.name}</p>
+                    <p className="text-xs text-muted-foreground">{toCompany.industry}</p>
+                  </div>
+                  <Building2 className="h-4 w-4 text-muted-foreground" />
+                </div>
+                
+                {request.requirements && (
+                  <div className="bg-muted/30 rounded-lg p-3">
+                    <p className="text-sm font-medium mb-1">
+                      Looking for: {request.requirements.description || 'Developer'}
+                    </p>
+                    {request.requirements.skills && request.requirements.skills.length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {request.requirements.skills.slice(0, 3).map((skill, index) => (
+                          <Badge key={index} variant="outline" className="text-xs">
+                            {skill}
+                          </Badge>
+                        ))}
+                        {request.requirements.skills.length > 3 && (
+                          <Badge variant="outline" className="text-xs">
+                            +{request.requirements.skills.length - 3}
+                          </Badge>
+                        )}
+                      </div>
+                    )}
+                    {request.requirements.experience && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Experience: {request.requirements.experience.min}+ years
+                      </p>
+                    )}
+                  </div>
+                )}
+              </>
+            )}
           </div>
 
           {/* Transfer Details */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4 text-xs">
-            <div className="text-center p-2 bg-muted/50 rounded">
-              <DollarSign className="h-4 w-4 mx-auto mb-1 text-green-600" />
-              <div className="font-medium">
-                ${request.transferFee?.toLocaleString() || 'N/A'}
+            {request.placementType === 'employee_listing' && request.transferFee && (
+              <div className="text-center p-2 bg-muted/50 rounded">
+                <DollarSign className="h-4 w-4 mx-auto mb-1 text-green-600" />
+                <div className="font-medium">
+                  ${request.transferFee.toLocaleString()}
+                </div>
+                <div className="text-muted-foreground">Transfer Fee</div>
               </div>
-              <div className="text-muted-foreground">Transfer Fee</div>
-            </div>
+            )}
+            
+            {request.placementType === 'developer_search' && request.applications && (
+              <div className="text-center p-2 bg-muted/50 rounded">
+                <User className="h-4 w-4 mx-auto mb-1 text-blue-600" />
+                <div className="font-medium">
+                  {request.applications.length}
+                </div>
+                <div className="text-muted-foreground">Applications</div>
+              </div>
+            )}
             
             {request.loanDuration && (
               <div className="text-center p-2 bg-muted/50 rounded">
@@ -235,9 +308,9 @@ export default function TransfersPage() {
             <div className="flex items-center gap-3">
               <CheckCircle className="h-5 w-5 text-green-600" />
               <div>
-                <h4 className="font-medium text-green-800">Transfer Request Sent!</h4>
+                <h4 className="font-medium text-green-800">Transfer Placement Created!</h4>
                 <p className="text-sm text-green-600">
-                  Your transfer request has been successfully created and sent to the developer.
+                  Your transfer placement has been successfully created and published.
                 </p>
               </div>
               <Button 
@@ -269,7 +342,7 @@ export default function TransfersPage() {
           <Button asChild>
             <Link href="/transfers/new">
               <Plus className="mr-2 h-4 w-4" />
-              Create Transfer Request
+              Create Transfer Placement
             </Link>
           </Button>
         )}

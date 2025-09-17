@@ -128,10 +128,17 @@ export interface Company {
 }
 
 // Transfer & Loan Types
+export type TransferPlacementType = 'employee_listing' | 'developer_search';
+
 export interface TransferRequest {
   id: string;
   type: 'transfer' | 'loan';
-  developerId: string;
+  placementType: TransferPlacementType;
+  
+  // For employee listings: the employee being listed
+  // For developer search: undefined (will be filled when a developer applies)
+  developerId?: string;
+  
   fromCompanyId?: string;
   toCompanyId: string;
   status: 'pending' | 'negotiating' | 'approved' | 'rejected' | 'completed' | 'cancelled';
@@ -141,9 +148,27 @@ export interface TransferRequest {
   proposedSalary: number;
   currentSalary?: number;
   
+  // For developer search postings
+  salaryRange?: {
+    min: number;
+    max: number;
+  };
+  
   // Loan specific
   loanDuration?: number; // months
   loanStartDate?: Date;
+  
+  // Job requirements for developer search
+  requirements?: {
+    skills: string[];
+    experience: {
+      min: number;
+      max?: number;
+    };
+    location?: string;
+    employmentType?: 'full-time' | 'contract' | 'loan';
+    description: string;
+  };
   
   // Trial period
   trialPeriod?: {
@@ -154,9 +179,22 @@ export interface TransferRequest {
   // Messages and negotiations
   negotiations: Negotiation[];
   
+  // For developer search: applications from developers
+  applications?: DeveloperApplication[];
+  
   createdAt: Date;
   updatedAt: Date;
   approvedAt?: Date;
+}
+
+export interface DeveloperApplication {
+  id: string;
+  developerId: string;
+  message: string;
+  proposedSalary?: number;
+  availableFrom?: Date;
+  appliedAt: Date;
+  status: 'pending' | 'reviewing' | 'shortlisted' | 'rejected' | 'accepted';
 }
 
 export interface Negotiation {

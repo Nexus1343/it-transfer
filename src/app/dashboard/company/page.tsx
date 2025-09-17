@@ -108,7 +108,7 @@ export default function CompanyDashboard() {
             <Button asChild>
               <Link href="/transfers/new">
                 <UserPlus className="mr-2 h-4 w-4" />
-                Create Transfer Request
+                Create Transfer Placement
               </Link>
             </Button>
           </div>
