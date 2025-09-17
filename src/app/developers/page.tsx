@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -18,7 +19,8 @@ import {
   Code,
   Calendar,
   DollarSign,
-  Users
+  Users,
+  HandCoins
 } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import { mockDevelopers } from '@/data';
@@ -64,9 +66,9 @@ export default function DevelopersPage() {
     }
   });
 
-  const handleContact = (developer: Developer) => {
-    // This would open the transfer request modal
-    console.log('Contact developer:', developer.id);
+  const handleMakeOffer = (developer: Developer) => {
+    // Navigate to transfer wizard to make an offer to the developer's current company
+    window.location.href = `/transfers/new?developerId=${developer.id}`;
   };
 
   return (
@@ -250,17 +252,19 @@ export default function DevelopersPage() {
 
               {/* Actions */}
               <div className="flex gap-2">
-                <Button variant="outline" className="flex-1">
-                  <Eye className="mr-2 h-4 w-4" />
-                  View Profile
+                <Button variant="outline" className="flex-1" asChild>
+                  <Link href={`/profile/${developer.id}`}>
+                    <Eye className="mr-2 h-4 w-4" />
+                    View Profile
+                  </Link>
                 </Button>
                 {currentUser.role === 'company' && (
                   <Button 
                     className="flex-1"
-                    onClick={() => handleContact(developer)}
+                    onClick={() => handleMakeOffer(developer)}
                   >
-                    <UserPlus className="mr-2 h-4 w-4" />
-                    Contact
+                    <HandCoins className="mr-2 h-4 w-4" />
+                    Make an Offer
                   </Button>
                 )}
               </div>

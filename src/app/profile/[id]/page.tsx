@@ -31,7 +31,8 @@ import {
   Share,
   Heart,
   ChevronLeft,
-  Verified
+  Verified,
+  HandCoins
 } from 'lucide-react';
 import Link from 'next/link';
 import { useAppStore } from '@/store/useAppStore';
@@ -95,8 +96,13 @@ export default function ProfilePage() {
     }
   };
 
-  const handleContact = () => {
-    console.log('Contact:', profileId);
+  const handleMakeOffer = () => {
+    console.log('Make offer for developer:', profileId);
+  };
+
+  const handleStartTransfer = () => {
+    // Navigate to transfer wizard with pre-selected developer
+    window.location.href = `/transfers/new?developerId=${profileId}`;
   };
 
   const handleFollow = () => {
@@ -204,10 +210,16 @@ export default function ProfilePage() {
                   Share
                 </Button>
                 {currentUser.role === 'company' && (
-                  <Button onClick={handleContact}>
-                    <MessageCircle className="mr-2 h-4 w-4" />
-                    Contact
-                  </Button>
+                  <>
+                    <Button onClick={handleStartTransfer} size="lg">
+                      <HandCoins className="mr-2 h-4 w-4" />
+                      Make an Offer
+                    </Button>
+                    <Button variant="outline" onClick={handleMakeOffer}>
+                      <MessageCircle className="mr-2 h-4 w-4" />
+                      Negotiate
+                    </Button>
+                  </>
                 )}
               </div>
             </div>
@@ -258,10 +270,13 @@ export default function ProfilePage() {
 
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className={`grid w-full ${currentUser.role === 'company' ? 'grid-cols-4' : 'grid-cols-3'}`}>
             <TabsTrigger value="overview">Skills & Experience</TabsTrigger>
             <TabsTrigger value="achievements">Achievements</TabsTrigger>
             <TabsTrigger value="activity">Activity</TabsTrigger>
+            {currentUser.role === 'company' && (
+              <TabsTrigger value="insights">Company Insights</TabsTrigger>
+            )}
           </TabsList>
           
           <TabsContent value="overview" className="mt-6">
@@ -423,6 +438,173 @@ export default function ProfilePage() {
               </CardContent>
             </Card>
           </TabsContent>
+
+          {/* Company Insights Tab */}
+          {currentUser.role === 'company' && (
+            <TabsContent value="insights" className="mt-6">
+              <div className="grid gap-6">
+                {/* Success Metrics */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <TrendingUp className="h-5 w-5" />
+                      Success Metrics
+                    </CardTitle>
+                    <CardDescription>
+                      Key indicators for this developer's performance and reliability
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div className="text-center p-4 bg-green-50 rounded-lg border border-green-200">
+                        <div className="text-2xl font-bold text-green-600 mb-1">
+                          {Math.round(((transferRequests.filter(r => r.status === 'completed' || r.status === 'approved').length || 1) / (transferRequests.length || 1)) * 100)}%
+                        </div>
+                        <div className="text-sm text-green-700">Success Rate</div>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          Based on completed transfers
+                        </div>
+                      </div>
+                      
+                      <div className="text-center p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <div className="text-2xl font-bold text-blue-600 mb-1">
+                          {dev.previousCompanies.length + (dev.currentCompanyId ? 1 : 0)}
+                        </div>
+                        <div className="text-sm text-blue-700">Companies</div>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          Career diversity
+                        </div>
+                      </div>
+                      
+                      <div className="text-center p-4 bg-purple-50 rounded-lg border border-purple-200">
+                        <div className="text-2xl font-bold text-purple-600 mb-1">
+                          {Math.round(dev.experience / (dev.previousCompanies.length + (dev.currentCompanyId ? 1 : 0)) * 10) / 10}
+                        </div>
+                        <div className="text-sm text-purple-700">Avg Tenure</div>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          Years per company
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Market Analysis */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <DollarSign className="h-5 w-5" />
+                      Market Analysis
+                    </CardTitle>
+                    <CardDescription>
+                      Financial insights and market positioning
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+                        <div>
+                          <div className="font-medium">Current Market Value</div>
+                          <div className="text-sm text-muted-foreground">
+                            Based on skills, experience, and performance
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-2xl font-bold text-primary">
+                            ${dev.marketValue.current.toLocaleString()}
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            Updated {dev.marketValue.lastUpdated.toLocaleDateString()}
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+                        <div>
+                          <div className="font-medium">Suggested Offer Range</div>
+                          <div className="text-sm text-muted-foreground">
+                            Competitive range for this developer
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-lg font-bold">
+                            ${Math.round(dev.marketValue.current * 0.95).toLocaleString()} - ${Math.round(dev.marketValue.current * 1.15).toLocaleString()}
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            95% - 115% of market value
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {dev.salaryExpectation && (
+                        <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+                          <div>
+                            <div className="font-medium">Developer's Expectation</div>
+                            <div className="text-sm text-muted-foreground">
+                              Salary expectation from developer
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-lg font-bold">
+                              ${dev.salaryExpectation.toLocaleString()}
+                            </div>
+                            <div className="text-xs text-muted-foreground">
+                              {dev.salaryExpectation > dev.marketValue.current ? 'Above' : 'Below'} market value
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Skill Demand Analysis */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Code className="h-5 w-5" />
+                      Skill Demand Analysis
+                    </CardTitle>
+                    <CardDescription>
+                      How in-demand are this developer's skills in the current market
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {dev.technicalSkills.slice(0, 6).map((skill, index) => {
+                        // Mock demand percentage based on skill popularity
+                        const demandPercentage = Math.max(60, 100 - index * 8);
+                        return (
+                          <div key={skill.name} className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <Badge variant="outline" className={getSkillColor(skill.level)}>
+                                {skill.level}
+                              </Badge>
+                              <span className="font-medium">{skill.name}</span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <div className="text-right">
+                                <div className="text-sm font-medium">{demandPercentage}% demand</div>
+                                <div className="text-xs text-muted-foreground">
+                                  {demandPercentage > 80 ? 'High' : demandPercentage > 60 ? 'Medium' : 'Low'} market demand
+                                </div>
+                              </div>
+                              <div className="w-16 bg-muted rounded-full h-2">
+                                <div 
+                                  className={`h-2 rounded-full ${demandPercentage > 80 ? 'bg-green-500' : demandPercentage > 60 ? 'bg-yellow-500' : 'bg-red-500'}`}
+                                  style={{ width: `${demandPercentage}%` }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+          )}
         </Tabs>
       </div>
     );

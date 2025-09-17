@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,7 +20,8 @@ import {
   User,
   Plus,
   Filter,
-  TrendingUp
+  TrendingUp,
+  X
 } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import { getTransferRequestsByDeveloper, getTransferRequestsByCompany, getDeveloperById, getCompanyById } from '@/data';
@@ -29,6 +31,16 @@ export default function TransfersPage() {
   const { currentUser } = useAppStore();
   const [activeTab, setActiveTab] = useState('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get('success') === 'created') {
+      setShowSuccessMessage(true);
+      // Auto-hide after 5 seconds
+      setTimeout(() => setShowSuccessMessage(false), 5000);
+    }
+  }, [searchParams]);
 
   // Get transfer requests based on user role
   const transferRequests = currentUser.role === 'developer' 
@@ -216,6 +228,31 @@ export default function TransfersPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {/* Success Message */}
+      {showSuccessMessage && (
+        <Card className="mb-6 border-green-200 bg-green-50">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <CheckCircle className="h-5 w-5 text-green-600" />
+              <div>
+                <h4 className="font-medium text-green-800">Transfer Request Sent!</h4>
+                <p className="text-sm text-green-600">
+                  Your transfer request has been successfully created and sent to the developer.
+                </p>
+              </div>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => setShowSuccessMessage(false)}
+                className="ml-auto text-green-600 hover:text-green-800"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
